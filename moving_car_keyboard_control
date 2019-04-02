@@ -1,0 +1,223 @@
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
+from math import *
+import numpy as np
+
+def myInit() :
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(65,1,.01,400)
+    gluLookAt(8,9,8,
+              0,0,0,
+              0,1,0)
+    glClearColor(1,1,1,1)
+    glClear(GL_COLOR_BUFFER_BIT)
+car_z=0
+angle=0
+x=0
+forward=True
+
+
+def arrowkeys(key, x, y):  # car_moving_control
+    global car_z
+    if key == GLUT_KEY_LEFT:
+        car_z += 2
+    elif key == GLUT_KEY_RIGHT:
+        car_z -= 2
+
+
+def sec6():
+    global car_z
+    global angle
+    global x
+    global forward
+    glClear(GL_COLOR_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+    glRotate(-90,0,1,0)
+    glBegin(GL_POLYGON)#grey street
+    glColor3f(.5, .5, 0.5)
+    glVertex(10, 0, -2)
+    glVertex(-100, 0, -2)
+    glVertex(-100, 0, 10.5)
+    glVertex(10, 2, 4.1)
+    glEnd()
+    glLoadIdentity()
+
+    glRotate(-90,0,1,0)
+    glBegin(GL_TRIANGLES)  # left green street
+    glColor3f(0, .5, 0)
+    glVertex(-69, 0, 10.5-2)
+    glVertex(100, 2, 4.1-2)
+    glVertex(100, -1, 100-2)
+    glEnd()
+    glLoadIdentity()
+
+
+
+    glRotate(90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # blue sky
+    glColor(0.5, 0.8, .9)
+    glVertex(200, 0, -500-20)
+    glVertex(100, 0, -500)
+    glVertex(100, 0, -.01)
+    glVertex(-10, 0, -5-29)
+    glEnd()
+    glLoadIdentity()
+
+    glColor(1, 1, 0)
+    glTranslate(-5, 7.5, 2)
+    glutSolidSphere(1, 20, 7)  # sun
+
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # right green street
+    glColor3f(0, .5, 0)
+    glVertex(10, 0, -15)
+    glVertex(-100, 0, -15)
+    glVertex(-100, 0, -2)
+    glVertex(10, 0, -2)
+    glEnd()
+    glLoadIdentity()
+
+    glRotate(-90,0,1,0)
+    glBegin(GL_POLYGON)#white street3
+    glColor3f(1, 1, 1)
+    glVertex(2, 0, .2)
+    glVertex(-3, 0, .5)
+    glVertex(-3, 0,1.6)
+    glVertex(2.3,.4, 1.5)
+    glEnd()
+    glLoadIdentity()
+    glRotate(-90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # white street2
+    glColor3f(1, 1, 1)
+    glVertex(7.2, 0, .3)
+    glVertex(3.3, 0, .32)
+    glVertex(3.3, 0, 1.33)
+    glVertex(7.0, .4, 1.6)
+    glEnd()
+    glLoadIdentity()
+    glRotate(-90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # white street1
+    glColor3f(1, 1, 1)
+    glVertex(11.2, 0, .3)
+    glVertex(8.2, 0, .3)
+    glVertex(8.0, .4, 1.6)
+    glVertex(11.0, .4, 1.6)
+    glEnd()
+    glLoadIdentity()
+    glRotate(-90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # white street4
+    glColor3f(1, 1, 1)
+    glVertex(-5, 0, .3)
+    glVertex(-13.4, 0, .7)
+    glVertex(-13, 0, 1.8)
+    glVertex(-4.3, .4, 1.7)
+    glEnd()
+    glLoadIdentity()
+    glRotate(-90, 0, 1, 0)
+    glBegin(GL_POLYGON)  # white street5
+    glColor3f(1, 1, 1)
+    glVertex(-16, 0, .3)
+    glVertex(-35, 0, .3)
+    glVertex(-25.3, .4, 1.9)
+    glVertex(-14.5, .4, 1.9)
+    glEnd()
+    glLoadIdentity()
+
+    glColor(1, 0, 0)
+    glTranslate(0, 0, 0 - .5 * x - 20)
+    glutSolidSphere(.6, 20, 7)  # ball
+    glLoadIdentity()
+
+    glRotate(90, 0, 1, 0)
+    glColor3f(1, 0, 0)
+    glTranslate(2.5 - x + .5, .05, -.500 - car_z)
+    glScale(.25, 0.5, 0.25)
+    glutSolidIcosahedron()  # left light
+    glLoadIdentity()
+
+    glRotate(90, 0, 1, 0)
+    glColor3f(1, 0, 0)
+    glTranslate(2.5 - x + .5, .05, .500 - car_z)
+    glScale(.25, 0.5, 0.25)
+    glutSolidIcosahedron()  # right light
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(0, 0, 0)
+    glTranslate(2.5+x, -2.5 * .25, -2.5 * .5+car_z)
+    glRotate(angle, 0, 0, 1)
+    glutWireTorus(.2, .5, 12, 90)#front right torus
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(0, 0, 0)
+    glTranslate(2.5 + x, -2.5 * .25, 2.5 * .5 + car_z)
+    glRotate(angle, 0, 0, 1)
+    glutWireTorus(.2, .5, 12, 90)  # front left
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(1,1,0)
+    glTranslate(x,0,0+car_z)
+    glScale(1,.25,0.5)
+    glutSolidCube(5)#down cube
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(1, 1, 0)
+    glTranslate(x+0,5*.25,0+car_z)
+    glScale(.5,.25,.5)
+    glutSolidCube(5)#up cube
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(0, 0, 0)
+    glTranslate(-2.5+x,-2.5*.25,-2.5*.5+car_z)
+    glRotate(angle, 0, 0, 1)
+    glutWireTorus(.2,.5,12,90)#back right
+    glLoadIdentity()
+
+    glRotate(-90, 0, 1, 0)
+    glColor3f(1, 1, 0)
+    glTranslate(-2.5+x, -2.5 * .25, 2.5 * .5+car_z)
+    glRotate(angle, 0, 0, 1)
+    glutWireTorus(.2, .5, 12, 90)#back left
+    glLoadIdentity()
+
+
+    if x > 5:
+        forward = False
+    if x < -5:
+        forward = True
+
+    if forward:
+        angle -= .8
+        x -= 0.0229
+    else:
+        x -= .0229
+        angle += .8
+
+    glutSwapBuffers()
+
+
+    glLoadIdentity()
+
+
+
+
+glutInit()
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+glutInitWindowSize(500, 500)
+glutCreateWindow(b"sec6")
+glutDisplayFunc(sec6)
+glutIdleFunc(sec6)
+glutSpecialFunc(arrowkeys)
+myInit()
+glutMainLoop()
+
