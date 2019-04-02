@@ -131,7 +131,7 @@ def sec6():
 
     glColor(1, 0, 0)
     glTranslate(0, 0, 0 - .5 * x - 20)
-    glutSolidSphere(.6, 20, 7)  # ball
+    glutSolidSphere(1, 20, 7)  # ball
     glLoadIdentity()
 
     glRotate(90, 0, 1, 0)
